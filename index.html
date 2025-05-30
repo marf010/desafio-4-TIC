@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desafio 4</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: rgba(165, 230, 145, 0.932);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .text {
+      font-size: 2rem;
+      font-weight: 600;
+      color: rgb(19, 112, 10);
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .text.first-text {
+      color: white;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    .text.sec-text {
+      border-right: 3px solid rgba(83, 54, 10, 0.911);
+      animation: typing 4s steps(30, end), blink 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .btn-continuar {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-continuar:hover {
+      background-color: #45a049;
+    }
+
+    .questao-container {
+      display: none;
+      margin-top: 40px;
+      width: 100%;
+    }
+
+    .questao-container strong {
+      font-size: 1.75rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .questao-container p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .questao-container button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #0d6502;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .questao-container button:hover {
+      background-color: #14890b;
+    }
+
+    .questao-container input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .feedback {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .parabens-screen {
+      display: none;
+      font-size: 2rem;
+      color: #0d6502;
+      margin-top: 20px;
+      animation: fadeIn 2s;
+    }
+
+    .codigo-final {
+      display: none;
+      font-size: 1.5rem;
+      color: #0d6502;
+      margin-top: 20px;
+      animation: fadeIn 2s;
+      font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .text.first-text {
+        font-size: 1.8rem;
+      }
+
+      .text {
+        font-size: 1.4rem;
+      }
+
+      .btn-continuar,
+      .questao-container button {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+      }
+
+      .questao-container strong {
+        font-size: 1.5rem;
+      }
+
+      .questao-container p {
+        font-size: 1rem;
+      }
+
+      .feedback {
+        font-size: 1rem;
+      }
+
+      .parabens-screen {
+        font-size: 1.5rem;
+      }
+
+      .codigo-final {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="text first-text">Desafio 4</span>
+    <span class="text sec-text"></span>
+    <button id="continueBtn" class="btn-continuar">Continuar</button>
+
+    <div id="questao1" class="questao-container">
+      <strong>Questões</strong>
+      <p id="textoQuestao"></p>
+      <div id="respostas"></div>
+      <div id="feedback" class="feedback"></div>
+    </div>
+
+    <div id="parabensScreen" class="parabens-screen"></div>
+    <div id="codigoFinal" class="codigo-final"></div>
+  </div>
+
+  <script>
+    const text = document.querySelector(".sec-text");
+    const button = document.getElementById("continueBtn");
+    const questaoContainer1 = document.getElementById("questao1");
+    const textoQuestao = document.getElementById("textoQuestao");
+    const respostasDiv = document.getElementById("respostas");
+    const feedback = document.getElementById("feedback");
+    const parabensScreen = document.getElementById("parabensScreen");
+    const codigoFinal = document.getElementById("codigoFinal");
+    let mensagemMostrada = false; // Variável para controlar se a mensagem já foi mostrada
+
+    function textLoad() {
+      setTimeout(() => { text.textContent = "Bem-vindo/a!"; }, 0);
+      setTimeout(() => { text.textContent = "Chegaste ao Jardim!"; }, 5000);
+      setTimeout(() => { text.textContent = "Ficamos muito felizes por teres chegado até aqui!"; }, 10000);
+      setTimeout(() => {
+        text.textContent = "Para continuares esta jornada, visualiza o teu redor!";
+        button.style.display = "inline-block";
+      }, 12000);
+    }
+
+    button.addEventListener("click", () => {
+      button.style.display = "none";
+      text.innerHTML = "Olha ao teu redor...👀";
+
+      setTimeout(() => {
+        questaoContainer1.style.display = "block";
+        textoQuestao.innerHTML = "Qual é a espécie que consegues visualizar?";
+        respostasDiv.innerHTML = `
+          <button onclick="responderEspecie('Aveleira (Corylus avellana)')">Aveleira (Corylus avellana)</button>
+          <button onclick="responderEspecie('Coqueiro (Cocos nucifera)')">Coqueiro (Cocos nucifera)</button>
+          <button onclick="responderEspecie('Sequoia-vermelha (Sequoia sempervirens)')">Sequoia-vermelha (Sequoia sempervirens)</button>
+          <button onclick="responderEspecie('Medronheiro (Arbutus unedo)')">Medronheiro (Arbutus unedo)</button>
+        `;
+      }, 7000);
+    });
+
+    function responderEspecie(resposta) {
+      if (resposta === "Aveleira (Corylus avellana)") {
+        feedback.textContent = "✔️ Correto! Sabias que, entre os 4 ou 8 anos, as Aveleiras podem atingir mais de 10 metros? 🌲";
+        feedback.style.color = "green";
+        setTimeout(mostrarQuestao2, 10000);
+      } else {
+        feedback.textContent = "❌ Resposta incorreta. Tenta observar mais atentamente ao teu redor.";
+        feedback.style.color = "red";
+        setTimeout(() => {
+          feedback.textContent = "";
+        }, 7000);
+      }
+    }
+
+    function mostrarQuestao2() {
+      textoQuestao.innerHTML = "Neste jardim é possível encontrar uma vasta quantidade de <em>Trifolium repens</em>, também conhecido como trevo-branco?🌿";
+      respostasDiv.innerHTML = `
+        <button onclick="responderVF(false)">Falso</button>
+        <button onclick="responderVF(true)">Verdadeiro</button>
+      `;
+      feedback.textContent = "";
+    }
+
+    function responderVF(resposta) {
+      if (resposta) {
+        feedback.textContent = "✔️ Correto! Sabias que é possível encontrares trevos-de-quatro numa área de 1 em cada 1000 trevos? �";
+        feedback.style.color = "green";
+        setTimeout(mostrarQuestaoMultipla, 10000);
+      } else {
+        feedback.textContent = "❌ Incorreto. O trevo-branco realmente cresce aqui em grande quantidade. Tenta novamente!";
+        feedback.style.color = "red";
+        setTimeout(mostrarQuestao2, 7000);
+      }
+    }
+
+    function mostrarQuestaoMultipla() {
+      textoQuestao.innerHTML = "Quais destas espécies consegues visualizar? (Dica: Escolhe duas opções)";
+      respostasDiv.innerHTML = `
+        <label><input type="checkbox" value="Quercus robur"> Carvalho-alvarinho (<em>Quercus robur</em>)</label><br>
+        <label><input type="checkbox" value="Arbutus unedo"> Medronheiro (<em>Arbutus unedo</em>)</label><br>
+        <label><input type="checkbox" value="Lactuca serriola"> Alface Espinhosa (<em>Lactuca serriola</em>)</label><br>
+        <label><input type="checkbox" value="Olea europaea"> Oliveira (<em>Olea europaea</em>)</label><br><br>
+        <button onclick="verificarMultipla()">Confirmar</button>
+      `;
+      feedback.textContent = "";
+    }
+
+    function verificarMultipla() {
+  const checkboxes = document.querySelectorAll('#respostas input[type="checkbox"]:checked');
+  const respostasSelecionadas = Array.from(checkboxes).map(cb => cb.value);
+  const respostasCorretas = ["Quercus robur", "Lactuca serriola"];
+  const acertou = respostasCorretas.every(r => respostasSelecionadas.includes(r)) &&
+                  respostasSelecionadas.length === respostasCorretas.length;
+
+  if (acertou) {
+    feedback.textContent = "✔️ Correto! Sabias que ambas estas espécies são nativas da Europa? 🌳";
+    feedback.style.color = "green";
+
+    setTimeout(() => {
+      questaoContainer1.style.display = "none";
+      feedback.textContent = "";
+
+      if (!mensagemMostrada) {
+        text.textContent = "As próximas 3 questões vão incluir temas de conhecimento geral!!";
+        mensagemMostrada = true;
+
+        setTimeout(() => {
+          text.textContent = "";
+          questaoContainer1.style.display = "block";
+          mostrarQuestaoCultural1();
+        }, 3000);
+      } else {
+        questaoContainer1.style.display = "block";
+        mostrarQuestaoCultural1();
+      }
+    }, 3000);
+  } else {
+    feedback.textContent = "❌ Resposta incorreta. Tenta novamente.";
+    feedback.style.color = "red";
+    setTimeout(mostrarQuestaoMultipla, 8000);
+  }
+}
+
+
+    function mostrarQuestaoCultural1() {
+      textoQuestao.innerHTML = "Qual é a principal função das folhas nas plantas?";
+      respostasDiv.innerHTML = `
+        <button onclick="responderCultural1('Absorver água do solo')">Absorver água do solo</button>
+        <button onclick="responderCultural1('Transportar seiva bruta')">Transportar seiva bruta</button>
+        <button onclick="responderCultural1('Realizar o processo de fotossíntese')">Realizar o processo de fotossíntese</button>
+        <button onclick="responderCultural1('Proteger a raiz')">Proteger a raiz</button>
+      `;
+      feedback.textContent = "";
+    }
+
+    function responderCultural1(resposta) {
+      if (resposta === "Realizar o processo de fotossíntese") {
+        feedback.textContent = "✔️ Correto! As folhas são órgãos das plantas onde ocorre a fotossíntese.";
+        feedback.style.color = "green";
+        setTimeout(() => {
+          feedback.textContent = "";
+          mostrarQuestaoCultural2();
+        }, 3000);
+      } else {
+        feedback.textContent = "❌ Incorreto. Tenta novamente.";
+        feedback.style.color = "red";
+        setTimeout(mostrarQuestaoCultural1, 7000);
+      }
+    }
+
+    function mostrarQuestaoCultural2() {
+      textoQuestao.innerHTML = "Qual parte da planta é responsável por absorver água e sais minerais?";
+      respostasDiv.innerHTML = `
+        <button onclick="responderCultural2('Flor')">Flor</button>
+        <button onclick="responderCultural2('Caule')">Caule</button>
+        <button onclick="responderCultural2('Raiz')">Raiz</button>
+        <button onclick="responderCultural2('Fruto')">Fruto</button>
+      `;
+      feedback.textContent = "";
+    }
+
+    function responderCultural2(resposta) {
+      if (resposta === "Raiz") {
+        feedback.textContent = "✔️ Correto! A raiz é a responsável por absorver e fornecer às outras partes da planta. 🌱";
+        feedback.style.color = "green";
+        setTimeout(mostrarQuestaoCultural3, 10000);
+      } else {
+        feedback.textContent = "❌ Incorreto. A resposta correta é 'Raiz'.";
+        feedback.style.color = "red";
+        setTimeout(mostrarQuestaoCultural2, 7000);
+      }
+    }
+
+    function mostrarQuestaoCultural3() {
+      textoQuestao.innerHTML = "O caule tem como principal função:";
+      respostasDiv.innerHTML = `
+        <button onclick="responderCultural3('Realizar a fotossíntese')">Realizar a fotossíntese</button>
+        <button onclick="responderCultural3('Armazenar oxigênio')">Armazenar oxigênio</button>
+        <button onclick="responderCultural3('Sustentar a planta e transportar substâncias')">Sustentar a planta e transportar substâncias</button>
+        <button onclick="responderCultural3('Produzir flores')">Produzir flores</button>
+      `;
+      feedback.textContent = "";
+    }
+
+    function responderCultural3(resposta) {
+      if (resposta === "Sustentar a planta e transportar substâncias") {
+        feedback.textContent = "✔️ Exato! O caule sustenta a planta e transporta água, sais e nutrientes. 🌿";
+        feedback.style.color = "green";
+        setTimeout(() => {
+          questaoContainer1.style.display = "none";
+          parabensScreen.textContent = "🎉 Parabéns! Concluíste todas as perguntas.";
+          parabensScreen.style.display = "block";
+          
+          setTimeout(() => {
+            codigoFinal.textContent = "Agora está na hora de fechar o círculo: 4156";
+            codigoFinal.style.display = "block";
+          }, 3000);
+        }, 3000);
+      } else {
+        feedback.textContent = "❌ Incorreto. O caule sustenta a planta e transporta substâncias.";
+        feedback.style.color = "red";
+        setTimeout(mostrarQuestaoCultural3, 7000);
+      }
+    }
+
+    textLoad();
+  </script>
+</body>
+</html>
